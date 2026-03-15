@@ -1,4 +1,4 @@
--- Třetí výzkumná otázka
+-- Třetí výzkumná otázka: Která kategorie potravin zdražuje nejpomaleji (je u ní nejnižší percentuální meziroční nárůst)? 
 -- metoda řešení: pomocí okenní funkce LAG jsem vypočítala meziroční procentuální změnu ceny pro každou kategorii potravin ve všech dostupných letech
 -- poté jsem z těchto hodnot vypočítala průměrný meziroční nárůst pro každou kategorii a výsledky seřadila od nejnižšího, výsledkem je tedy jediná hodnota
 ODPOVĚĎ: Nejpomalejší nárůst (respektive průměrný pokles) vykazuje Cukr krystalový s hodnotou -1,92 %.
