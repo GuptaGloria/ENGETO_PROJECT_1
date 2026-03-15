@@ -1,1 +1,18 @@
-
+-- Druhá výzkumná otázka
+-- metoda řešení:Identifikovala jsem první a poslední rok, pro který jsou v datech dostupné jak ceny sledovaných potravin, tak údaje o mzdách
+-- následně jsem vypočítala poměr průměrné mzdy a průměrné ceny pro každou komoditu v těchto dvou hraničních letech
+-- ODPOVĚĎ: kupní síla obyvatel u obou sledovaných potravin mezi první a poslední srovnatelnou vlnou měření vzrostla
+WITH common_years AS (
+    SELECT MIN(year) as min_y, MAX(year) as max_y
+    FROM data_academy_content.t_gloria_gupta_project_sql_primary_final
+    WHERE food_category IN ('Mléko polotučné pasterované', 'Chléb konzumní kmínový')
+      AND average_wage IS NOT NULL
+)
+SELECT 
+    year,
+    food_category,
+    ROUND(AVG(average_wage) / AVG(average_price), 2) as affordable_quantity
+FROM data_academy_content.t_gloria_gupta_project_sql_primary_final
+JOIN common_years ON year = min_y OR year = max_y
+WHERE food_category IN ('Mléko polotučné pasterované', 'Chléb konzumní kmínový')
+GROUP BY year, food_category;
