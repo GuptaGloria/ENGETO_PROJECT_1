@@ -1,0 +1,24 @@
+-- Vytvoření finální primary tabulky, která je i v DBeaveru
+CREATE TABLE t_gloria_gupta_project_SQL_primary_final AS
+SELECT     -- výběr sloupců, které jsou relevantní pro výzkumné otázky
+    cp.payroll_year AS year,  -- roky
+    ib.name AS industry,  -- odvětví
+    ROUND(AVG(cp.value)::numeric, 2) AS average_wage, -- zaokrouhlení mzdy pro přehlednost
+    pc.name AS food_category, -- kategorie jídel
+    ROUND(AVG(pr.value)::numeric, 2) AS average_price -- zaokrouhlení mzdy pro přehlednost
+FROM czechia_payroll cp
+-- joiny jsou použité, aby ve výsledné tabulce nebyly kódy, ale názvy a byla přehledná
+JOIN czechia_payroll_industry_branch ib
+    ON cp.industry_branch_code = ib.code
+JOIN czechia_payroll_value_type vt
+    ON cp.value_type_code = vt.code
+JOIN czechia_price pr
+    ON cp.payroll_year = EXTRACT(YEAR FROM pr.date_from)
+JOIN czechia_price_category pc
+    ON pr.category_code = pc.code
+WHERE vt.name = 'Průměrná hrubá mzda na zaměstnance'
+GROUP BY -- opět pro přehlednost
+    cp.payroll_year,
+    ib.name,
+    pc.name
+ORDER BY year;
