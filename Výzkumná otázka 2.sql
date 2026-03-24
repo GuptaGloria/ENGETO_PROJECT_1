@@ -1,0 +1,18 @@
+-- Druhá výzkumná otázka: Kolik je možné si koupit litrů mléka a kilogramů chleba za první a poslední srovnatelné období v dostupných datech cen a mezd?
+-- metoda řešení: Identifikovala jsem první a poslední rok, pro který jsou v datech dostupné jak ceny sledovaných potravin, tak údaje o mzdách
+-- následně jsem vypočítala poměr průměrné mzdy a průměrné ceny pro každou komoditu v těchto dvou hraničních letech
+-- ODPOVĚĎ: v roce 2006 bylo možné koupit cca 1 287 kg chleba a 1 437 l mléka, zatímco v roce 2018 to bylo již 1 342 kg chleba a 1 642 l mléka, kupní síla vzrostla
+WITH common_years AS (
+    SELECT MIN(year) as min_y, MAX(year) as max_y
+    FROM data_academy_content.t_gloria_gupta_project_sql_primary_final
+    WHERE food_category IN ('Mléko polotučné pasterované', 'Chléb konzumní kmínový')
+      AND average_wage IS NOT NULL
+)
+SELECT 
+    year,
+    food_category,
+    ROUND(AVG(average_wage) / AVG(average_price), 2) as affordable_quantity
+FROM data_academy_content.t_gloria_gupta_project_sql_primary_final
+JOIN common_years ON year = min_y OR year = max_y
+WHERE food_category IN ('Mléko polotučné pasterované', 'Chléb konzumní kmínový')
+GROUP BY year, food_category;
